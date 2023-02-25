@@ -197,12 +197,12 @@ class Line
                 'CPU' => [
                     'usage_1' => sys_getloadavg()[0],   // 1 minute load average
                     'usage_5' => sys_getloadavg()[1],  // 5 minute load average
-                    'usage_15' => sys_getloadavg()[2],  // 15 minute load average
+                    'usage' => sys_getloadavg()[2],  // 15 minute load average
                 ],
                 'DISK' => [
-                    'usage' => $this->Convert((disk_free_space('/') - disk_total_space('/'))),
+                    'free' => $this->Convert(disk_free_space('/')),
                     'total' => $this->Convert(disk_total_space('/')),
-                ]
+                ],
             ],
             'OLD' => $this->filterVariables(Request::hasSession() ? Request::old() : []),
             'SESSION' => $this->filterVariables(Request::hasSession() ? Session::all() : []),
