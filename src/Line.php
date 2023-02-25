@@ -191,11 +191,15 @@ class Line
             'packagesCount' => count($this->getComposerPackages()),
             'RESOURCES' => [
                 'MEMORY' => [
-                    'usage' => memory_get_usage(),
-                    'peak' => memory_get_peak_usage(),
+                    'usage' => MemoryUsageConvert(memory_get_usage()),
+                    'peak' => MemoryUsageConvert(memory_get_peak_usage()),
                 ],
-                'TIME' => [
-                    'usage' => microtime(true) - LARAVEL_START,
+                'CPU' => [
+                    'usage' => CpuUsageConvert(sys_getloadavg()[0]),
+                ],
+                'DISK' => [
+                    'usage' => DiskUsageConvert(disk_free_space('/')),
+                    'total' => DiskUsageConvert(disk_total_space('/')),
                 ],
             ],
             'OLD' => $this->filterVariables(Request::hasSession() ? Request::old() : []),
@@ -423,5 +427,12 @@ class Line
 
         // this should not happen
         return [];
+    }
+
+
+    function MemoryUsageConvert($size)
+    {
+        $unit=array('b','kb','mb','gb','tb','pb');
+        return @round($size/pow(1024,($i=floor(log($size,1024)))),2).' '.$unit[$i];
     }
 }
