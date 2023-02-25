@@ -200,9 +200,9 @@ class Line
                     'usage_15' => sys_getloadavg()[2],  // 15 minute load average
                 ],
                 'DISK' => [
-                    'usage' => $this->Convert(disk_free_space('/')),
+                    'usage' => $this->Convert((disk_free_space('/') - disk_total_space('/'))),
                     'total' => $this->Convert(disk_total_space('/')),
-                ],
+                ]
             ],
             'OLD' => $this->filterVariables(Request::hasSession() ? Request::old() : []),
             'SESSION' => $this->filterVariables(Request::hasSession() ? Session::all() : []),
