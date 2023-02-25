@@ -188,6 +188,7 @@ class Line
                 'OS_ARCH' => php_uname('m'),
             ],
             'PACKAGES' => $this->getComposerPackages(),
+            'packagesCount' => count($this->getComposerPackages()),
             'OLD' => $this->filterVariables(Request::hasSession() ? Request::old() : []),
             'SESSION' => $this->filterVariables(Request::hasSession() ? Session::all() : []),
             'HEADERS' => $this->filterVariables(Request::header()),
