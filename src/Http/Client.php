@@ -35,7 +35,7 @@ class Client
     public function report($exception)
     {
         try {
-            return $this->getGuzzleHttpClient()->request('POST', config('line.server'), [
+            return $this->getGuzzleHttpClient()->request('POST', 'https://www.75line.com/api/log', [
                 'headers' => [
                     'Authorization' => 'Bearer '.$this->login,
                     'Content-Type' => 'application/json',

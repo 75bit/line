@@ -118,18 +118,7 @@ return [
     |
     */
 
-    // 'release' => trim(exec('git --git-dir ' . base_path('.git') . ' log --pretty="%h" -n1 HEAD')),
-
-    /*
-    |--------------------------------------------------------------------------
-    | Server setting
-    |--------------------------------------------------------------------------
-    |
-    | This setting allows you to change the server.
-    |
-    */
-
-    'server' => env('Line_SERVER', 'https://www.75line.com/api/log'),
+    'release' => trim(exec('git --git-dir ' . base_path('.git') . ' log --pretty="%h" -n1 HEAD')),
 
     /*
     |--------------------------------------------------------------------------

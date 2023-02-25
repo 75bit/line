@@ -2,6 +2,7 @@
 
 namespace Line;
 
+
 use Throwable;
 use Line\Http\Client;
 use Illuminate\Support\Str;
@@ -10,6 +11,9 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Session;
+use Composer\InstalledVersions;
+use Jean85\PrettyVersions;
+use PackageVersions\Versions;
 
 class Line
 {
@@ -21,6 +25,12 @@ class Line
 
     /** @var null|string */
     private $lastExceptionId;
+
+
+    /**
+     * @var array<string, string> The list of installed vendors
+     */
+    private static $packages = [];
 
     /**
      * @param Client $client
@@ -167,8 +177,17 @@ class Line
                 'HTTP_USER_AGENT' => Request::server('HTTP_USER_AGENT'),
                 'SERVER_PROTOCOL' => Request::server('SERVER_PROTOCOL'),
                 'SERVER_SOFTWARE' => Request::server('SERVER_SOFTWARE'),
+                'SERVER_ADDR' => Request::server('SERVER_ADDR'),
+                'SERVER_PORT' => Request::server('SERVER_PORT'),
+                'SERVER_NAME' => Request::server('SERVER_NAME'),
+                'SERVER_ADMIN' => Request::server('SERVER_ADMIN'),
                 'PHP_VERSION' => PHP_VERSION,
+                'KERNEL' => php_uname('a'),
+                'OS_NAME' => php_uname('s'),
+                'OS_VERSION' => php_uname('r'),
+                'OS_ARCH' => php_uname('m'),
             ],
+            'PACKAGES' => $this->getComposerPackages(),
             'OLD' => $this->filterVariables(Request::hasSession() ? Request::old() : []),
             'COOKIE' => $this->filterVariables(Request::cookie()),
             'SESSION' => $this->filterVariables(Request::hasSession() ? Session::all() : []),
@@ -358,5 +377,42 @@ class Line
         $exceptionString = $this->createExceptionString($data);
 
         return Cache::put($exceptionString, $exceptionString, config('line.sleep'));
+    }
+
+
+    /**
+     * @return array<string, string>
+     */
+    private static function getComposerPackages(): array
+    {
+        if (empty(self::$packages)) {
+            foreach (self::getInstalledPackages() as $package) {
+                try {
+                    self::$packages[$package] = PrettyVersions::getVersion($package)->getPrettyVersion();
+                } catch (\Throwable $exception) {
+                    continue;
+                }
+            }
+        }
+
+        return self::$packages;
+    }
+
+    /**
+     * @return string[]
+     */
+    private static function getInstalledPackages(): array
+    {
+        if (class_exists(InstalledVersions::class)) {
+            return InstalledVersions::getInstalledPackages();
+        }
+
+        if (class_exists(Versions::class)) {
+            // BC layer for Composer 1, using a transient dependency
+            return array_keys(Versions::VERSIONS);
+        }
+
+        // this should not happen
+        return [];
     }
 }
