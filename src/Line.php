@@ -195,7 +195,9 @@ class Line
                     'peak' => $this->Convert(memory_get_peak_usage()),
                 ],
                 'CPU' => [
-                    'usage' => $this->Convert(sys_getloadavg()[0]),
+                    'usage_1' => sys_getloadavg()[0],   // 1 minute load average
+                    'usage_5' => sys_getloadavg()[1],  // 5 minute load average
+                    'usage_15' => sys_getloadavg()[2],  // 15 minute load average
                 ],
                 'DISK' => [
                     'usage' => $this->Convert(disk_free_space('/')),
@@ -432,7 +434,7 @@ class Line
 
     private static function Convert($size)
     {
-        $unit=array('b','kb','mb','gb','tb','pb');
+        $unit=array('B','KB','MB','GB','TB','PD');
         return @round($size/pow(1024,($i=floor(log($size,1024)))),2).' '.$unit[$i];
     }
 }
