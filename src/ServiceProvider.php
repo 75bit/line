@@ -39,8 +39,8 @@ class ServiceProvider extends BaseServiceProvider
         // Map any routes
         $this->mapLineApiRoutes();
 
-        // Create an alias to the line-js-client.blade.php include
-        Blade::include('line::line-js-client', 'lineJavaScriptClient');
+        // Create an alias to the line-js.blade.php include
+        Blade::include('line::line-js', 'LineJavaScript');
     }
 
     /**

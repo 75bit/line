@@ -1,5 +1,5 @@
 <script defer>
-    class LineJsClient {
+    class LineJs {
         constructor() {
             window.addEventListener('error', e => {
                 this.send(e);
@@ -27,7 +27,7 @@
                 };
 
                 let xhr = new XMLHttpRequest();
-                xhr.open("POST", window.location.origin + '/line-api/javascript-report', true);
+                xhr.open("POST", window.location.origin + '/line-api/js-report', true);
                 xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
                 xhr.onload = function () {
                     if (this.status >= 200 && this.status < 300) {
@@ -50,5 +50,5 @@
         }
     }
 
-    new LineJsClient();
+    new LineJs();
 </script>

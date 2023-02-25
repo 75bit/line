@@ -26,7 +26,6 @@ class Line
     /** @var null|string */
     private $lastExceptionId;
 
-
     /**
      * @var array<string, string> The list of installed vendors
      */
@@ -196,8 +195,8 @@ class Line
                 ],
                 'CPU' => [
                     'usage_1' => sys_getloadavg()[0],   // 1 minute load average
-                    'usage_5' => sys_getloadavg()[1],  // 5 minute load average
-                    'usage' => sys_getloadavg()[2],  // 15 minute load average
+                    'usage_5' => sys_getloadavg()[1],   // 5 minute load average
+                    'usage_15' => sys_getloadavg()[2],  // 15 minute load average
                 ],
                 'DISK' => [
                     'free' => $this->Convert(disk_free_space('/')),

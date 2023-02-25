@@ -12,7 +12,7 @@ return [
     |
     */
 
-    'login_key' => env('Line_KEY', ''),
+    'login_key' => env('LINE_KEY', ''),
 
     /*
     |--------------------------------------------------------------------------
@@ -24,7 +24,7 @@ return [
     |
     */
 
-    'project_key' => env('Line_PROJECT_KEY', ''),
+    'project_key' => env('LINE_PROJECT_KEY', ''),
 
     /*
     |--------------------------------------------------------------------------
@@ -129,6 +129,6 @@ return [
     | Never turn SSL verification off on production instances
     |
     */
-    'verify_ssl' => env('Line_VERIFY_SSL', true),
+    'verify_ssl' => env('LINE_VERIFY_SSL', true),
 
 ];
