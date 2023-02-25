@@ -191,15 +191,15 @@ class Line
             'packagesCount' => count($this->getComposerPackages()),
             'RESOURCES' => [
                 'MEMORY' => [
-                    'usage' => Convert(memory_get_usage()),
-                    'peak' => Convert(memory_get_peak_usage()),
+                    'usage' => $this->Convert(memory_get_usage()),
+                    'peak' => $this->Convert(memory_get_peak_usage()),
                 ],
                 'CPU' => [
-                    'usage' => Convert(sys_getloadavg()[0]),
+                    'usage' => $this->Convert(sys_getloadavg()[0]),
                 ],
                 'DISK' => [
-                    'usage' => Convert(disk_free_space('/')),
-                    'total' => Convert(disk_total_space('/')),
+                    'usage' => $this->Convert(disk_free_space('/')),
+                    'total' => $this->Convert(disk_total_space('/')),
                 ],
             ],
             'OLD' => $this->filterVariables(Request::hasSession() ? Request::old() : []),
@@ -430,7 +430,7 @@ class Line
     }
 
 
-    function Convert($size)
+    private static function Convert($size)
     {
         $unit=array('b','kb','mb','gb','tb','pb');
         return @round($size/pow(1024,($i=floor(log($size,1024)))),2).' '.$unit[$i];
