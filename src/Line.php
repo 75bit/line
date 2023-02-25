@@ -189,7 +189,6 @@ class Line
             ],
             'PACKAGES' => $this->getComposerPackages(),
             'OLD' => $this->filterVariables(Request::hasSession() ? Request::old() : []),
-            'COOKIE' => $this->filterVariables(Request::cookie()),
             'SESSION' => $this->filterVariables(Request::hasSession() ? Session::all() : []),
             'HEADERS' => $this->filterVariables(Request::header()),
             'PARAMETERS' => $this->filterVariables($this->filterParameterValues(Request::all()))
