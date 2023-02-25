@@ -189,6 +189,15 @@ class Line
             ],
             'PACKAGES' => $this->getComposerPackages(),
             'packagesCount' => count($this->getComposerPackages()),
+            'RESOURCES' => [
+                'MEMORY' => [
+                    'usage' => memory_get_usage(),
+                    'peak' => memory_get_peak_usage(),
+                ],
+                'TIME' => [
+                    'usage' => microtime(true) - LARAVEL_START,
+                ],
+            ],
             'OLD' => $this->filterVariables(Request::hasSession() ? Request::old() : []),
             'SESSION' => $this->filterVariables(Request::hasSession() ? Session::all() : []),
             'HEADERS' => $this->filterVariables(Request::header()),
