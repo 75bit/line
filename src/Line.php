@@ -213,6 +213,10 @@ class Line
                     'databaseVersion' => DB::select('SELECT VERSION() as version')[0]->version ?? null,
                     'tablesCount' => count(DB::select('SHOW TABLES')) ?? 0,
                 ],
+                'FRAMEWORK' => [
+                    'name' => 'Laravel',
+                    'version' => app()->version(),
+                ],
             ],
             'OLD' => $this->filterVariables(Request::hasSession() ? Request::old() : []),
             'SESSION' => $this->filterVariables(Request::hasSession() ? Session::all() : []),
@@ -448,7 +452,7 @@ class Line
         return @round($size/pow(1024,($i=floor(log($size,1024)))),2).' '.$unit[$i];
     }
 
-    function getUptime() {
+    private static function getUptime() {
         $str   = @file_get_contents('/proc/uptime');
         $num   = floatval($str);
         $mins  = $num % 60;      $num = (int)($num / 60);
