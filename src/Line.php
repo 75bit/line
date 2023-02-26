@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Session;
 use Composer\InstalledVersions;
 use Jean85\PrettyVersions;
 use PackageVersions\Versions;
+use DB;
 
 class Line
 {
@@ -201,6 +202,16 @@ class Line
                 'DISK' => [
                     'free' => $this->Convert(disk_free_space('/')),
                     'total' => $this->Convert(disk_total_space('/')),
+                ],
+                'UPTIME' => [
+                    'uptime' => $this->getUptime(),
+                ],
+                'DATABASE' => [
+                    'driver' => config('database.connections.' . config('database.default') . '.driver') ?? null,
+                    'database' => config('database.connections.' . config('database.default') . '.database') ?? null,
+                    'databaseSize' => DB::select('SELECT ROUND(SUM(data_length + index_length) / 1024 / 1024, 2) as size FROM information_schema.TABLES WHERE table_schema = "' . config('database.connections.' . config('database.default') . '.database') . '"')[0]->size . ' MB' ?? null,
+                    'databaseVersion' => DB::select('SELECT VERSION() as version')[0]->version ?? null,
+                    'tablesCount' => count(DB::select('SHOW TABLES')) ?? 0,
                 ],
             ],
             'OLD' => $this->filterVariables(Request::hasSession() ? Request::old() : []),
@@ -435,5 +446,13 @@ class Line
     {
         $unit=array('B','KB','MB','GB','TB','PD');
         return @round($size/pow(1024,($i=floor(log($size,1024)))),2).' '.$unit[$i];
+    }
+
+    function getUptime() {
+        $str   = @file_get_contents('/proc/uptime');
+        $num   = floatval($str);
+        $mins  = $num % 60;      $num = (int)($num / 60);
+        $hours = $num % 24;      $num = (int)($num / 24);
+        return $num . ' days, ' . $hours . ' hours, ' . $mins . ' minutes';
     }
 }
