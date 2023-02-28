@@ -4,10 +4,14 @@
             window.addEventListener('error', e => {
                 this.send(e);
             });
+            window.addEventListener('warning', e => {
+                this.send(e);
+            });
         }
-
         send(e) {
             return new Promise(function (resolve, reject) {
+                console.log(e);
+
                 let stack = e.error.stack;
                 let exception = e.error.toString();
 
