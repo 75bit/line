@@ -219,11 +219,9 @@ class Line
                 ],
                 'CACHE' => [
                     'driver' => config('cache.default'),
-                    'stores' => config('cache.stores'),
                 ],
                 'QUEUE' => [
                     'driver' => config('queue.default'),
-                    'connections' => config('queue.connections'),
                 ],
                 'SESSION' => [
                     'driver' => config('session.driver'),
@@ -482,7 +480,7 @@ class Line
     private static function getComposerVersion()
     {
         $composer = json_decode(file_get_contents(base_path('composer.json')), true);
-        return $composer['version'];
+        return $composer['version'] ?? 'unknown';
     }
 
     private static function getSdkInfo()
