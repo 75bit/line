@@ -1,10 +1,21 @@
 {
     "name": "75bit/line",
-    "description": "Laravel 6.x/7.x/8.x/9.x bug notifier",
+    "description": "Laravel 5.x/6.x/7.x/8.x/9.x bug tracker and uptime monitor",
     "keywords": [
         "laravel",
+        "status page",
+        "status",
+        "heartbeats",
+        "dns",
         "log",
-        "error"
+        "error",
+        "bug",
+        "tracker",
+        "monitor",
+        "uptime",
+        "ssl",
+        "certificate",
+        "ssl certificate"
     ],
     "require": {
         "php": "^7.4 || ^8.0",

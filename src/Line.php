@@ -217,6 +217,22 @@ class Line
                     'name' => 'Laravel',
                     'version' => app()->version(),
                 ],
+                'CACHE' => [
+                    'driver' => config('cache.default'),
+                    'stores' => config('cache.stores'),
+                ],
+                'QUEUE' => [
+                    'driver' => config('queue.default'),
+                    'connections' => config('queue.connections'),
+                ],
+                'SESSION' => [
+                    'driver' => config('session.driver'),
+                    'lifetime' => config('session.lifetime'),
+                ],
+                'COMPOSER' => [
+                    'version' => $this->getComposerVersion(),
+                ],
+                'SDK' => $this->getSdkInfo(),
             ],
             'OLD' => $this->filterVariables(Request::hasSession() ? Request::old() : []),
             'SESSION' => $this->filterVariables(Request::hasSession() ? Session::all() : []),
@@ -448,15 +464,30 @@ class Line
 
     private static function Convert($size)
     {
-        $unit=array('B','KB','MB','GB','TB','PD');
-        return @round($size/pow(1024,($i=floor(log($size,1024)))),2).' '.$unit[$i];
+        $unit = array('B', 'KB', 'MB', 'GB', 'TB', 'PD');
+        return @round($size / pow(1024, ($i = floor(log($size, 1024)))), 2) . ' ' . $unit[$i];
     }
 
-    private static function getUptime() {
-        $str   = @file_get_contents('/proc/uptime');
-        $num   = floatval($str);
-        $mins  = $num % 60;      $num = (int)($num / 60);
-        $hours = $num % 24;      $num = (int)($num / 24);
+    private static function getUptime()
+    {
+        $str = @file_get_contents('/proc/uptime');
+        $num = floatval($str);
+        $mins = $num % 60;
+        $num = (int)($num / 60);
+        $hours = $num % 24;
+        $num = (int)($num / 24);
         return $num . ' days, ' . $hours . ' hours, ' . $mins . ' minutes';
+    }
+
+    private static function getComposerVersion()
+    {
+        $composer = json_decode(file_get_contents(base_path('composer.json')), true);
+        return $composer['version'];
+    }
+
+    private static function getSdkInfo()
+    {
+        $composer = json_decode(file_get_contents(base_path('composer.json')), true);
+        return ['name' => '75bit/line', 'version' => $composer['require']['75bit/line']];
     }
 }
